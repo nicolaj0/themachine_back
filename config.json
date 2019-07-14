@@ -3,7 +3,7 @@
     "Favorite": "blue"
   },
   "ConnectionStrings": {
-    "CodeCamp": "Data Source=DESKTOP-3A4BHLQ;Initial Catalog=App;Integrated Security=True;Connect Timeout=30;"
+    "CodeCamp": "Data Source=DESKTOP-3A4BHLQ;Initial Catalog=TheMachine;Integrated Security=True;Connect Timeout=30;"
   },
   "Logging": {
     "LogLevel": {

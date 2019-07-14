@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using CoreCodeCamp;
+using CoreCodeCamp.Data;
 using CoreCodeCamp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,18 +21,22 @@ namespace DutchTreat.Controllers
   public class AccountController : Controller
   {
     private readonly ILogger<AccountController> _logger;
-    private readonly SignInManager<StoreUser> _signInManager;
-    private readonly UserManager<StoreUser> _userManager;
+    private readonly SignInManager<MachineUser> _signInManager;
+    private readonly UserManager<MachineUser> _userManager;
+    private readonly MachineContext _context;
     private readonly IConfiguration _config;
 
     public AccountController(ILogger<AccountController> logger, 
-      SignInManager<StoreUser> signInManager,
-      UserManager<StoreUser> userManager,
+      SignInManager<MachineUser> signInManager,
+      UserManager<MachineUser> userManager,
+      MachineContext context,
+      
       IConfiguration config)
     {
       _logger = logger;
       _signInManager = signInManager;
       _userManager = userManager;
+      _context = context;
       _config = config;
     }
 
@@ -40,7 +45,7 @@ namespace DutchTreat.Controllers
     {
       if (ModelState.IsValid)
       {
-        StoreUser user = await _userManager.FindByNameAsync(model.Username);
+        var user = await _userManager.FindByNameAsync(model.Username);
 
         if (user != null)
         {
@@ -56,6 +61,12 @@ namespace DutchTreat.Controllers
               new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
             };
 
+            var caller = Request.HttpContext.Connection.LocalIpAddress;
+
+            var machine = _context.Machines.AsQueryable().FirstOrDefault(p => p.IpAddress == caller.ToString());
+            var lastSelection = _context.UserBeverages.AsQueryable().FirstOrDefault(p => p.User == user);
+            
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -69,7 +80,9 @@ namespace DutchTreat.Controllers
             var results = new
             {
               token = new JwtSecurityTokenHandler().WriteToken(token),
-              expiration = token.ValidTo
+              expiration = token.ValidTo,
+              lastSelection = lastSelection,
+              machine = machine
             };
 
             return Created("", results);

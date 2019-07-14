@@ -11,16 +11,16 @@ using Microsoft.Extensions.Configuration;
 
 namespace CoreCodeCamp.Data
 {
-  public class CampContextFactory : IDesignTimeDbContextFactory<CampContext>
+  public class CampContextFactory : IDesignTimeDbContextFactory<MachineContext>
   {
-    public CampContext CreateDbContext(string[] args)
+    public MachineContext CreateDbContext(string[] args)
     {
       var config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json")
         .Build();
 
-      return new CampContext(new DbContextOptionsBuilder<CampContext>().Options, config);
+      return new MachineContext(new DbContextOptionsBuilder<MachineContext>().Options, config);
     }
   }
 }

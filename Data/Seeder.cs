@@ -9,11 +9,11 @@ namespace CoreCodeCamp.Data
 {
     public class Seeder
     {
-        private readonly CampContext _ctx;
+        private readonly MachineContext _ctx;
         private readonly IHostingEnvironment _hosting;
-        private readonly UserManager<StoreUser> _userManager;
+        private readonly UserManager<MachineUser> _userManager;
 
-        public Seeder(CampContext ctx, IHostingEnvironment hosting, UserManager<StoreUser> userManager)
+        public Seeder(MachineContext ctx, IHostingEnvironment hosting, UserManager<MachineUser> userManager)
         {
             _ctx = ctx;
             _hosting = hosting;
@@ -25,10 +25,10 @@ namespace CoreCodeCamp.Data
             _ctx.Database.EnsureCreated();
 
             // Seed the Main User
-            StoreUser user = await _userManager.FindByEmailAsync("shawn@dutchtreat.com");
+            MachineUser user = await _userManager.FindByEmailAsync("shawn@dutchtreat.com");
             if (user == null)
             {
-                user = new StoreUser()
+                user = new MachineUser()
                 {
                     LastName = "ju",
                     FirstName = "ju",
@@ -42,6 +42,24 @@ namespace CoreCodeCamp.Data
                     throw new InvalidOperationException("Could not create user in Seeding");
                 }
             }
+            var machine = new  Machine
+            {
+                IpAddress = "127.0.0.1",
+                Name = "TheMachine_1"
+            };
+
+            _ctx.Machines.Add(machine);
+
+
+            var userBeverage = new UserBeverage
+            {
+                Sugar = 25,
+                User = user,
+                BeverageType = 2,
+                UseOwnMug = false
+            };
+
+            _ctx.UserBeverages.Add(userBeverage);
 
             _ctx.SaveChanges();
         }

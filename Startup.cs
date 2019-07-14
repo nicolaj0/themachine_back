@@ -36,9 +36,9 @@ namespace CoreCodeCamp
         public void ConfigureServices(IServiceCollection services)
 
         {
-            services.AddIdentity<StoreUser, IdentityRole>(cfg => 
+            services.AddIdentity<MachineUser, IdentityRole>(cfg => 
                 { cfg.User.RequireUniqueEmail = true; })
-                .AddEntityFrameworkStores<CampContext>();;
+                .AddEntityFrameworkStores<MachineContext>();;
 
             services.AddAuthentication()
                 .AddCookie()
@@ -53,12 +53,12 @@ namespace CoreCodeCamp
                 });
 
             
-            services.AddDbContext<CampContext>(cfg =>
+            services.AddDbContext<MachineContext>(cfg =>
             {
                 cfg.UseSqlServer(_config.GetConnectionString("CodeCamp"));
             });
 
-            services.AddScoped<ICampRepository, CampRepository>();
+          //  services.AddScoped<ICampRepository, MachineRepository>();
             services.AddTransient<Seeder>();
             services.AddAutoMapper();
 
@@ -72,11 +72,6 @@ namespace CoreCodeCamp
                 //  new HeaderApiVersionReader("X-Version"),
                 //  new QueryStringApiVersionReader("ver", "version"));
 
-                opt.Conventions.Controller<TalksController>()
-                    .HasApiVersion(new ApiVersion(1, 0))
-                    .HasApiVersion(new ApiVersion(1, 1))
-                    .Action(c => c.Delete(default(string), default(int)))
-                    .MapToApiVersion(1, 1);
             });
             
                
