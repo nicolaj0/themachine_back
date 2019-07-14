@@ -63,7 +63,7 @@ namespace DutchTreat.Controllers
               _config["Tokens:Issuer"],
               _config["Tokens:Audience"],
               claims,
-              expires: DateTime.Now.AddMinutes(30),
+              expires: DateTime.Now.AddHours(10),
               signingCredentials: creds);
 
             var results = new
