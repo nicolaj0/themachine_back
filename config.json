@@ -1,0 +1,20 @@
+{
+  "Colors": {
+    "Favorite": "blue"
+  },
+  "ConnectionStrings": {
+    "CodeCamp": "Data Source=DESKTOP-3A4BHLQ;Initial Catalog=App;Integrated Security=True;Connect Timeout=30;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning"
+    }
+  },
+  "Tokens": {
+    "Key": "a;lkjasdf;lkajsd;flkjas ;dflkja sd",
+    "Issuer": "http://localhost:8888",
+    "Audience": "users"
+  }
+    
+}
